@@ -1,0 +1,7 @@
+{
+  "name": "xibo-player",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
