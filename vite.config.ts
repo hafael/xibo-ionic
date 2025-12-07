@@ -23,11 +23,17 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost',
+        target: 'http://localhost:65501',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
         secure: false,
       },
+      '/download-proxy': {
+        target: 'http://localhost:65501', // Target the Xibo CMS root for file downloads
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/download-proxy/, ''),
+      },
     },
+    cors: true,
   },
 })
