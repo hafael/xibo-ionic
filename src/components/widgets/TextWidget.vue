@@ -1,11 +1,11 @@
 <template>
-  <div class="widget text-widget">
+  <div class="widget text-widget" :style="widgetStyle">
     <div v-html="renderedHtml" class="text-content"></div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, toRefs } from 'vue';
+import { ref, onMounted, toRefs, computed } from 'vue';
 import { soapService } from '@/services/soap';
 
 const props = defineProps<{
@@ -14,6 +14,21 @@ const props = defineProps<{
 
 const { media } = toRefs(props);
 const renderedHtml = ref('<p>Loading content...</p>');
+
+// Create a computed style object to dynamically apply styles from the media data
+const widgetStyle = computed(() => {
+  const style: { backgroundColor?: string } = {};
+  // The 'options' object in the media data can contain styling information
+  const options = media.value?.options;
+  if (options?.backgroundColor) {
+    style.backgroundColor = options.backgroundColor;
+  }
+
+  // Add more style properties from the options as needed
+  // For example: if (options.color) { style.color = options.color; }
+
+  return style;
+});
 
 onMounted(async () => {
   // Widgets that render HTML need to fetch their content
@@ -35,8 +50,8 @@ onMounted(async () => {
 
 <style scoped>
 .text-widget {
-  background-color: transparent; /* Background should be controlled by the received HTML */
-  color: white; /* Default text color */
+  /* background-color is now handled by widgetStyle */
+  color: white; /* Default text color, can be overridden by CMS */
   width: 100%;
   height: 100%;
   overflow: hidden;
